@@ -1,0 +1,112 @@
+@startuml
+
+' Clase principal del juego
+class TicTacToe {
+    + IniciarJuego() : Acción
+    + FinalizarJuego() : Acción
+    + ReiniciarJuego() : Acción
+    + VerificarGanador() : Jugador
+    + CambiarTurno() : Acción
+}
+
+' Clases esenciales del juego
+class Tablero {
+    - Celdas: Celda[,]
+    + DibujarTablero() : Acción
+    + MarcarCelda(fila: Número, columna: Número, jugador: Jugador) : Operación
+}
+
+class Celda {
+    - Fila: Número
+    - Columna: Número
+    - Estado: Texto
+    + Marcar(jugador: Jugador) : Acción
+    + EstaVacia() : Operación
+}
+
+class Jugador {
+    - Nombre: Texto
+    - Simbolo: Texto
+    - Puntuacion: Número
+    + HacerMovimiento(tablero: Tablero, fila: Número, columna: Número) : Operación
+}
+
+class Partida {
+    - Jugador1: Jugador
+    - Jugador2: Jugador
+    - Tablero: Tablero
+    - Marcador: Marcador
+    + Iniciar() : Acción
+    + Finalizar() : Acción
+}
+
+class Marcador {
+    - PuntajeJugador1: Número
+    - PuntajeJugador2: Número
+    + ActualizarPuntuacion(ganador: Jugador) : Operación
+}
+
+class IA {
+    - NivelDificultad: Texto
+    + CalcularMovimiento(tablero: Tablero) : Operación
+}
+
+' Clases adicionales
+class Historia {
+    - Movimientos: Lista<Movimiento>
+    + GuardarMovimiento(movimiento: Movimiento) : Acción
+    + MostrarHistorial() : Acción
+}
+
+class Movimiento {
+    - Jugador: Jugador
+    - Fila: Número
+    - Columna: Número
+    + RealizarMovimiento() : Acción
+}
+
+class Victoria {
+    - Jugador: Jugador
+    + Celebrar() : Acción
+}
+
+class Derrota {
+    - Jugador: Jugador
+    + RegistrarDerrota() : Acción
+}
+
+class Ranking {
+    - ListaJugadores: Lista<Jugador>
+    + ActualizarRanking(jugador: Jugador) : Operación
+}
+
+class Estadistica {
+    - PartidasJugadas: Número
+    - PartidasGanadas: Número
+    - PartidasPerdidas: Número
+    + MostrarEstadisticas() : Acción
+}
+
+' Relaciones entre clases
+TicTacToe o-- Partida : "Contiene"
+TicTacToe o-- Tablero : "Usa"
+TicTacToe o-- Marcador : "Usa"
+
+Partida *-- "2" Jugador : "Contiene"
+Partida *-- Historia : "Guarda"
+Partida *-- Marcador : "Depende de"
+
+Jugador *-- Movimiento : "Realiza"
+
+Tablero *-- "9" Celda : "Compuesto por"
+
+Marcador *-- Victoria : "Registra"
+Marcador *-- Derrota : "Registra"
+Marcador *-- Ranking : "Actualiza"
+
+Historia *-- Movimiento : "Registra"
+
+Estadistica *-- Partida : "Analiza"
+Estadistica *-- Jugador : "Registra"
+
+@enduml
